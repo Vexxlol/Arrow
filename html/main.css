@@ -1,0 +1,23 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.nav {
+    background-color: red;
+    width: 100%;
+    height: 120px;
+    color: white;
+}
+
+.nav h3 {
+    margin-left: 30px;
+    padding-top: 50px;
+}
+
+.wrapper {
+    margin-left: 30%;
+    margin-right: 30%;
+    text-align: justify;
+}
