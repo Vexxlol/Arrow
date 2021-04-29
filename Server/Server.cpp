@@ -1,6 +1,7 @@
 #include<iostream>
 
 #include "../include/Server/Server.hpp"
+#include "../include/Request/Request.hpp"
 
 #include<sys/socket.h>
 #include<stdlib.h>
@@ -78,46 +79,14 @@ void Server::start(int argc, char const* argv[]) {
         std::string request = buffer;
 
         // JANK CODE!
-        
-
-        std::map<std::string, std::string> headers;
-        std::vector<std::string> lines;
-
-        std::istringstream buffer(request);
-        std::string line;
-
-        while(getline(buffer, line)) {
-            lines.push_back(line);
-        }
-
-        std::vector<std::string> requestLine;
-        std::string reqL = std::string(lines[0]);
         std::string tmp = "";
-
-        for (int i = 0; i <= reqL.length(); i++) {
-            if (reqL[i] == ' ') {
-                requestLine.push_back(tmp);
-                tmp = "";
-            } else {
-                tmp += reqL[i];
-            }
-        }
-
-        headers["method"] = requestLine[0];
-        headers["route"] = requestLine[1];
-
-        tmp = headers["route"];
-        tmp = std::regex_replace(tmp, std::regex("\\%20"), " ");
-        headers["route"].replace(0, 1, "");
-
-        if (headers["route"] == "") {
-            headers["route"] = "index.html";
-        }
-
-        std::cout << std::string(green + "Arrow " + purple + "->" + reset + " Request made to " +  yellow + headers["route"] + reset) << std::endl;
+        std::string line;
+        Request req(request);
         
-        tmp = "./html/" + headers["route"];
-        line = "";
+
+        std::cout << std::string(green + "Arrow " + purple + "->" + reset + " Request made to " +  yellow + req.headers["route"] + reset) << std::endl;
+        
+        tmp = "./html/" + req.headers["route"];
 
         std::fstream target;
         target.open(tmp, std::ios::in);
