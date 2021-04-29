@@ -3,7 +3,7 @@ compile:
 	Main.cpp \
 	Server/Server.cpp \
   Request/Request.cpp \
-	 -o web
+	 -o Arrow
 
 run: 
-	sudo ./web
+	sudo ./Arrow

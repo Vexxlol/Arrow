@@ -2,7 +2,7 @@
 Arrow is an c++ webserver application designed to send & serve files. (Currently in early developement)
 
 # Usage 
-```yaml
+```shell
 make compile
 make run
 ```
