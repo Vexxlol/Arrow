@@ -2,6 +2,7 @@
 
 #include "../include/Server/Server.hpp"
 #include "../include/Request/Request.hpp"
+#include "../include/Response/Response.hpp"
 
 #include<sys/socket.h>
 #include<stdlib.h>
@@ -85,7 +86,7 @@ void Server::start(int argc, char const* argv[]) {
         
 
         std::cout << std::string(green + "Arrow " + purple + "->" + reset + " Request made to " +  yellow + req.headers["route"] + reset) << std::endl;
-        
+        /*
         tmp = "./html/" + req.headers["route"];
 
         std::fstream target;
@@ -100,8 +101,11 @@ void Server::start(int argc, char const* argv[]) {
             this->response = "HTTP/1.1 200 OK\n\n";
             this->response += tmp;
         }
+        */
 
-        write(new_socket, this->response.c_str(), strlen(this->response.c_str()));
-        close(new_socket);
+
+        Response resp(new_socket, req);
+        //write(new_socket, this->response.c_str(), strlen(this->response.c_str()));
+        //close(new_socket);
     }
 }
