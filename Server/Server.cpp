@@ -30,6 +30,38 @@ void Server::start(int argc, char const* argv[]) {
 
     std::string reset = "\u001b[0m";
 
+    std::string line;
+    /*std::fstream configTarget;
+    configTarget.open("./config.arrow", std::ios::in);
+    if (configTarget) {
+        while (std::getline(configTarget, line)) {
+            std::string tmp;
+            std::string key;
+            bool value = false;
+            for (int i = 0; i < line.length(); i++) {
+                if (!value) {
+                    if (line[i] == '=') {
+                        value = true;
+                        key = tmp;
+                        tmp = "";
+                    } else {
+                        tmp += line[i];
+                    }
+                } else {
+                    if (key == "dir") {
+                        dir += line[i];
+                    } else if (key == "ssr") {
+                        ssr += line[i];
+                    } else if (key == "loglevel") {
+                        logLevel += line[i];
+                    }
+                }
+            }
+        }
+    }
+
+    std::cout << dir << " " << ssr << " " << logLevel << std::endl;
+*/
     int server_fd, new_socket, valread;
     struct sockaddr_in address;
     
@@ -69,43 +101,17 @@ void Server::start(int argc, char const* argv[]) {
     
 
     while (true) {
-
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
             perror("accept");
             exit(EXIT_FAILURE);
         }
 
         valread = read( new_socket, buffer, 3000);
-        //printf("%s\n", buffer);
         std::string request = buffer;
 
-        // JANK CODE!
-        std::string tmp = "";
-        std::string line;
         Request req(request);
-        
 
         std::cout << std::string(green + "Arrow " + purple + "->" + reset + " Request made to " +  yellow + req.headers["route"] + reset) << std::endl;
-        /*
-        tmp = "./html/" + req.headers["route"];
-
-        std::fstream target;
-        target.open(tmp, std::ios::in);
-        tmp = "";
-        if (!target) { this->response = "HTTP/1.1 404 OK\nContent-Type: text/html\n\n404"; }
-        else {
-            while (std::getline(target, line)) {
-                tmp += line + "\n";
-            }
-            target.close();
-            this->response = "HTTP/1.1 200 OK\n\n";
-            this->response += tmp;
-        }
-        */
-
-
         Response resp(new_socket, req);
-        //write(new_socket, this->response.c_str(), strlen(this->response.c_str()));
-        //close(new_socket);
     }
 }

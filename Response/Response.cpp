@@ -11,6 +11,7 @@
 
 #include "../include/Response/Response.hpp"
 #include "../include/Request/Request.hpp"
+#include "../Config.hpp"
 
 
 Response::Response(int socket, Request& req) {
@@ -18,18 +19,24 @@ Response::Response(int socket, Request& req) {
 
     std::string tmp = "/var/www/html/" + req.headers["route"];
     std::string line;
+    std::string fileExt = "text/html";
 
     std::fstream target;
     target.open(tmp, std::ios::in);
     tmp = "";
-    if (!target) { this->response = "HTTP/1.1 404 OK\nContent-Type: text/html\n\n404"; }
+    if (!target) { this->response = "HTTP/1.1 404 BAD\nContent-Type: text/html\n\n404"; }
     else {
         while (std::getline(target, line)) {
             tmp += line + "\n";
         }
         target.close();
-        this->response = "HTTP/1.1 200 OK\n\n";
-        this->response += tmp;
+        this->response = "HTTP/1.1 200 OK\nServer: Arrow/" + arrowBuildVersion + "\nAccept-Ranges: bytes\nConnection: close";
+        if (req.headers["fileExtension"] == ".css") fileExt = "text/css";
+        if (req.headers["fileExtension"] == ".js") fileExt = "text/javascript";
+        if (req.headers["fileExtension"] == ".png") fileExt = "image/png";
+        this->response += "\nContent-Type: " + fileExt;
+        this->response += "\nContent-Length: " + std::to_string(tmp.length());
+        this->response += "\n\n" + tmp;
     }
 
     write(this->socket, this->response.c_str(), strlen(this->response.c_str()));
