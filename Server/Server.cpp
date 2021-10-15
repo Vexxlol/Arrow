@@ -112,6 +112,7 @@ void Server::start(int argc, char const* argv[]) {
         Request req(request);
 
         std::cout << std::string(green + "Arrow " + purple + "->" + reset + " Request made to " +  yellow + req.headers["route"] + reset) << std::endl;
+        
         Response resp(new_socket, req);
     }
 }
